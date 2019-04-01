@@ -49,7 +49,7 @@ def main():
 
     csv = open("LOC/" + reponame + ".csv", "w")
 #     releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
-    csv.write("id,tag_name,dayDifference,LOC\n")
+    csv.write("id,tag_name,LOC,dayDifference\n")
 
     iterlines = iter(lines)
     next(iterlines)
