@@ -41,11 +41,24 @@ def clonerep(url):
 def main():
     hardcoded = "https://github.com/spring-projects/spring-boot.git"
     clonerep(hardcoded)
-    name = hardcoded.split("/")[-1].split(".")[0]
-    testfilepaths = search_files("repos/" + name + "/")
-    for f in testfilepaths:
-        name = f.split("/")[-1]
-        print(name + " has " + str(getLOC(f)))
+
+    reponame = hardcoded.split("/")[-1].split(".")[0]
+    
+    coms = open("commits/" + reponame + ".csv")
+    lines = coms.readlines()
+#     print(lines)
+
+    for line in lines:
+        llist = line.split(",")
+        os.chdir("repos/" + reponame)
+        subprocess.run(["git", "checkout", llist[2]])
+        os.chdir("../..")
+
+        # commits = open("commits/" + reponame + ".csv")
+        # testfilepaths = search_files("repos/" + reponame + "/")
+        # for f in testfilepaths:
+        #     name = f.split("/")[-1]
+        # #     print(name + " has " + str(getLOC(f)))
 
 
     
