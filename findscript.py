@@ -14,10 +14,15 @@ def search_files(directory='.', extension='java'):
 
 
 def getLOC(filepath):
+    i = 0
     with open(filepath) as f:
         for i, l in enumerate(f):
             pass
-    return i + 1
+
+    if i:
+        return i + 1
+    else:
+        return 0
 
 
 
@@ -38,8 +43,39 @@ def clonerep(url):
     os.system("git"+ " clone " + "https://github.com/" + url + " repos/" + name + "/" )
 
 def main():
-    hardcodedlist = ["spring-projects/spring-boot.git", "apache/incubator-dubbo", "proxyee-down-org/proxyee-down"]
-    
+    hardcodedlist = "liaohuqiu/android-Ultra-Pull-To-Refresh ctripcorp/apollo alibaba/arthas google/auto alibaba/canal dbeaver/dbeaver dropwizard/dropwizard alibaba/druid alibaba/fastjson google/guava google/guice hankcs/HanLP apache/incubator-druid apache/incubator-dubbo apache/incubator-shardingsphere xetorthio/jedis junit-team/junit4 libgdx/libgdx mybatis/mybatis-3 naver/pinpoint proxyee-down-org/proxyee-down redisson/redisson square/retrofit spring-projects/spring-boot b3log/symphony code4craft/webmagic xuxueli/xxl-job openzipkin/zipkin zxing/zxing".split(" ")
+    """
+JakeWharton/ActionBarSherlock
+ liaohuqiu/android-Ultra-Pull-To-Refresh
+ ctripcorp/apollo
+ alibaba/arthas
+ google/auto
+ alibaba/canal
+ dbeaver/dbeaver
+ dropwizard/dropwizard
+ alibaba/druid
+ alibaba/fastjson
+ google/guava
+ google/guice
+ hankcs/HanLP
+ apache/incubator-druid
+ apache/incubator-dubbo
+ apache/incubator-shardingsphere
+ xetorthio/jedis
+ junit-team/junit4
+ libgdx/libgdx
+ mybatis/mybatis-3
+ naver/pinpoint
+ proxyee-down-org/proxyee-down
+ redisson/redisson
+ square/retrofit
+ spring-projects/spring-boot
+ b3log/symphony
+ code4craft/webmagic
+ xuxueli/xxl-job
+ openzipkin/zipkin
+ zxing/zxing
+ """
     for hardcoded in hardcodedlist:
         clonerep(hardcoded)
         reponame = hardcoded.split("/")[-1].split(".")[0]
@@ -75,7 +111,7 @@ def main():
             if len(llist) == 5:
                 daydiffhr = llist[4].strip()
                 toWrite += "," + daydiffhr
-                toWrite += "\n"
+            toWrite += "\n"
             csv.write(toWrite)
         csv.close
 
