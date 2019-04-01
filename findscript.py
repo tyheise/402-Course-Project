@@ -1,6 +1,9 @@
 import os
 import subprocess
 
+hardcodedlist = "JakeWharton/ActionBarSherlock liaohuqiu/android-Ultra-Pull-To-Refresh ctripcorp/apollo alibaba/arthas google/auto alibaba/canal dbeaver/dbeaver dropwizard/dropwizard alibaba/druid alibaba/fastjson google/guava google/guice hankcs/HanLP apache/incubator-druid apache/incubator-dubbo apache/incubator-shardingsphere xetorthio/jedis junit-team/junit4 libgdx/libgdx mybatis/mybatis-3 naver/pinpoint proxyee-down-org/proxyee-down redisson/redisson square/retrofit spring-projects/spring-boot b3log/symphony code4craft/webmagic xuxueli/xxl-job openzipkin/zipkin zxing/zxing".split(" ")
+
+
 def search_files(directory='.', extension='java'):
     testfiles = []
     extension = extension.lower()
@@ -42,8 +45,7 @@ def clonerep(url):
     name = url.split("/")[-1].split(".")[0]
     os.system("git"+ " clone " + "https://github.com/" + url + " repos/" + name + "/" )
 
-def main():
-    hardcodedlist = "liaohuqiu/android-Ultra-Pull-To-Refresh ctripcorp/apollo alibaba/arthas google/auto alibaba/canal dbeaver/dbeaver dropwizard/dropwizard alibaba/druid alibaba/fastjson google/guava google/guice hankcs/HanLP apache/incubator-druid apache/incubator-dubbo apache/incubator-shardingsphere xetorthio/jedis junit-team/junit4 libgdx/libgdx mybatis/mybatis-3 naver/pinpoint proxyee-down-org/proxyee-down redisson/redisson square/retrofit spring-projects/spring-boot b3log/symphony code4craft/webmagic xuxueli/xxl-job openzipkin/zipkin zxing/zxing".split(" ")
+def main(hardcodedlist):
     """
 JakeWharton/ActionBarSherlock
  liaohuqiu/android-Ultra-Pull-To-Refresh
@@ -88,9 +90,6 @@ JakeWharton/ActionBarSherlock
         #     releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
         csv.write("id,tag_name,LOC,dayDifference, dayDifferenceHours\n")
 
-        #  skip first line
-        #     iterlines = iter(lines)
-        #     next(iterlines)
         for line in lines:
             llist = line.split(",")
             print(llist)
@@ -115,5 +114,36 @@ JakeWharton/ActionBarSherlock
             csv.write(toWrite)
         csv.close
 
+def getLOCChanges(hardcodedlist):
 
-main()
+    for rep in hardcodedlist:
+        reponame = rep.split("/")[1]
+        csv = open("LOC/" + reponame + ".csv", "r")
+        lines = csv.readlines()
+        LOClist =  []
+        i = 0
+        for l in lines[1:]:
+            LOClist.append(int(l.split(",")[2].strip()))
+            i += 1
+        
+        LOCChangelist = []
+        i = 0
+        while i < len(LOClist) - 1:
+            LOCChangelist.append(LOClist[i] - LOClist[i+1])
+            i+= 1
+        LOCChangelist.append(0)
+
+        # print(LOClist)
+        # print(LOCChangelist)
+
+        newCSV = open("changeLOC/" + reponame + ".csv", "w")
+        newCSV.write(lines[0].strip() + ",changeLOC\n")
+
+        i = 0
+        for l in lines[1:]:
+            newCSV.write(l.strip() + "," + str(LOCChangelist[i]) + "\n")
+            i+=1
+
+
+main(hardcodedlist)
+getLOCChanges(hardcodedlist)
