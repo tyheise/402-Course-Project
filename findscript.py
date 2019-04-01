@@ -49,13 +49,14 @@ def main():
 
     csv = open("LOC/" + reponame + ".csv", "w")
 #     releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
-    csv.write("id,tag_name,LOC,dayDifference\n")
+    csv.write("id,tag_name,LOC,dayDifference, dayDifferenceHours\n")
 
-    iterlines = iter(lines)
-    next(iterlines)
-    for line in iterlines:
+#  skip first line
+#     iterlines = iter(lines)
+#     next(iterlines)
+    for line in lines:
         llist = line.split(",")
-        # print(llist)
+        print(llist)
         os.chdir("repos/" + reponame)
         subprocess.run(["git", "checkout", llist[2]])
         os.chdir("../..")
@@ -70,8 +71,13 @@ def main():
 
         id = llist[0]
         tag = llist[1]
-        daydiff = llist[3]
-        csv.write(id + "," + tag + "," + str(loc)+ "," + daydiff + "\n")
+        daydiff = llist[3].strip()
+        toWrite = id + "," + tag + "," + str(loc)+ "," + daydiff
+        if len(llist) == 5:
+            daydiffhr = llist[4].strip()
+            toWrite += "," + daydiffhr
+        toWrite += "\n"
+        csv.write(toWrite)
     csv.close
 
 
