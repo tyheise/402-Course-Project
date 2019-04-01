@@ -35,8 +35,7 @@ def t():
 
 def clonerep(url):
     name = url.split("/")[-1].split(".")[0]
-    subprocess.run(["git", "clone", url, "repos/" + name + "/"])
-
+    os.system("git"+ " clone " + url + " repos/" + name + "/" )
 
 def main():
     hardcoded = "https://github.com/spring-projects/spring-boot.git"
@@ -48,16 +47,33 @@ def main():
     lines = coms.readlines()
 #     print(lines)
 
-    for line in lines:
+    csv = open("LOC/" + reponame + ".csv", "w")
+#     releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
+    csv.write("id,tag_name,dayDifference,LOC\n")
+
+    iterlines = iter(lines)
+    next(iterlines)
+    for line in iterlines:
         llist = line.split(",")
+        # print(llist)
         os.chdir("repos/" + reponame)
         subprocess.run(["git", "checkout", llist[2]])
         os.chdir("../..")
+        
+        # get LOC for each test file
+        testfilepaths = search_files("repos/" + reponame + "/")
+        loc = 0
+        for f in testfilepaths:
+            loc += getLOC(f)
 
-        # testfilepaths = search_files("repos/" + reponame + "/")
-        # for f in testfilepaths:
-        #     name = f.split("/")[-1]
-        # #     print(name + " has " + str(getLOC(f)))
+
+
+        id = llist[0]
+        tag = llist[1]
+        daydiff = llist[3]
+        csv.write(id + "," + tag + "," + str(loc)+ "," + daydiff + "\n")
+    csv.close
+
 
 
     
