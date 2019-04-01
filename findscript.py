@@ -54,7 +54,6 @@ def main():
         subprocess.run(["git", "checkout", llist[2]])
         os.chdir("../..")
 
-        # commits = open("commits/" + reponame + ".csv")
         # testfilepaths = search_files("repos/" + reponame + "/")
         # for f in testfilepaths:
         #     name = f.split("/")[-1]
