@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 def search_files(directory='.', extension='java'):
     testfiles = []
@@ -20,7 +21,7 @@ def getLOC(filepath):
 
 
 
-def main():
+def t():
     testfilepaths = search_files()
     print(testfilepaths[0])
     print(getLOC(testfilepaths[0]))
@@ -31,5 +32,22 @@ def main():
     for f in testfilepaths:
         name = f.split("/")[-1]
         print(name + " has " + str(getLOC(f)))
+
+def clonerep(url):
+    name = url.split("/")[-1].split(".")[0]
+    subprocess.run(["git", "clone", url, "repos/" + name + "/"])
+
+
+def main():
+    hardcoded = "https://github.com/spring-projects/spring-boot.git"
+    clonerep(hardcoded)
+    name = hardcoded.split("/")[-1].split(".")[0]
+    testfilepaths = search_files("repos/" + name + "/")
+    for f in testfilepaths:
+        name = f.split("/")[-1]
+        print(name + " has " + str(getLOC(f)))
+
+
+    
 
 main()
