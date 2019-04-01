@@ -68,26 +68,28 @@ def getCommits():
     fileList = os.listdir(csvFolder)
 
     for fileName in fileList:
-        csvPath = os.path.join(csvFolder, fileName)
-        csv = open(csvPath)
+        if fileName != '.gitignore':
+            csvPath = os.path.join(csvFolder, fileName)
+            csv = open(csvPath)
 
-        lines = csv.readlines()
-        repoName = (lines[1].split(","))[0]
-        repo = git.get_repo(repoName)
+            lines = csv.readlines()
+            repoName = (lines[1].split(","))[0]
+            print("Now getting commits from", repoName)
+            repo = git.get_repo(repoName)
 
-        repoName2 = (repoName.split("/"))[1]
+            repoName2 = (repoName.split("/"))[1]
 
-        repoFile = open(os.path.join(os.path.curdir,'commits',repoName2+".csv"), 'w')
-        for i in range(1,len(lines)-1):
-            line = lines[i].split(",")
+            repoFile = open(os.path.join(os.path.curdir,'commits',repoName2+".csv"), 'w')
+            for i in range(1,len(lines)-1):
+                line = lines[i].split(",")
 
-            # 2019-03-26 15:08:13
-            until = datetime.strptime(line[3], '%Y-%m-%d %H:%M:%S')
-            since = datetime.strptime(line[4], '%Y-%m-%d %H:%M:%S')
+                # 2019-03-26 15:08:13
+                until = datetime.strptime(line[3], '%Y-%m-%d %H:%M:%S')
+                since = datetime.strptime(line[4], '%Y-%m-%d %H:%M:%S')
 
-            commits = repo.get_commits(until=until, since=since)
-            if commits.totalCount > 0:
-                repoFile.write(line[1]+","+line[2]+","+commits[0].sha+","+str(until-since)+"\n")
+                commits = repo.get_commits(until=until, since=since)
+                if commits.totalCount > 0:
+                    repoFile.write(line[1]+","+line[2]+","+commits[0].sha+","+str(until-since)+"\n")
 
 def get_repo(repoName, git):
     repo = git.get_repo(repoName)
