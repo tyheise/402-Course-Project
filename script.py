@@ -5,14 +5,24 @@ from github import Github
 from datetime import datetime
 
 def searchRepos(maxNumOfRepos):
-    git = Github()
+    username = input("Github Username:")
+    pw = getpass.getpass()
+    git = Github(username, pw)
+
     repos = git.search_repositories('stars:>10000 language:Java', sort='stars', order='desc')
 
     f = open("reposConsidered.txt", "w")
     i=0
     while(i<maxNumOfRepos):
-        f.write(repos[i].full_name +"\n")
-        i+=1
+        try:
+            repoName = ((repos[i].full_name).split("/"))[1]
+            file_contents = repos[i].get_file_contents('pom.xml')
+            f.write(repos[i].full_name +"\n")
+            i+=1
+        except:
+            print("skipping " + repoName+ " because not a maven proj")
+            i+=1
+
     f.close()
     return
 
