@@ -35,53 +35,49 @@ def t():
 
 def clonerep(url):
     name = url.split("/")[-1].split(".")[0]
-    os.system("git"+ " clone " + url + " repos/" + name + "/" )
+    os.system("git"+ " clone " + "https://github.com/" + url + " repos/" + name + "/" )
 
 def main():
-    hardcoded = "https://github.com/spring-projects/spring-boot.git"
-    clonerep(hardcoded)
-
-    reponame = hardcoded.split("/")[-1].split(".")[0]
+    hardcodedlist = ["spring-projects/spring-boot.git", "apache/incubator-dubbo", "proxyee-down-org/proxyee-down"]
     
-    coms = open("commits/" + reponame + ".csv")
-    lines = coms.readlines()
-#     print(lines)
-
-    csv = open("LOC/" + reponame + ".csv", "w")
-#     releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
-    csv.write("id,tag_name,LOC,dayDifference, dayDifferenceHours\n")
-
-#  skip first line
-#     iterlines = iter(lines)
-#     next(iterlines)
-    for line in lines:
-        llist = line.split(",")
-        print(llist)
-        os.chdir("repos/" + reponame)
-        subprocess.run(["git", "checkout", llist[2]])
-        os.chdir("../..")
+    for hardcoded in hardcodedlist:
+        clonerep(hardcoded)
+        reponame = hardcoded.split("/")[-1].split(".")[0]
         
-        # get LOC for each test file
-        testfilepaths = search_files("repos/" + reponame + "/")
-        loc = 0
-        for f in testfilepaths:
-            loc += getLOC(f)
+        coms = open("commits/" + reponame + ".csv")
+        lines = coms.readlines()
+        #     print(lines)
 
+        csv = open("LOC/" + reponame + ".csv", "w")
+        #     releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
+        csv.write("id,tag_name,LOC,dayDifference, dayDifferenceHours\n")
 
+        #  skip first line
+        #     iterlines = iter(lines)
+        #     next(iterlines)
+        for line in lines:
+            llist = line.split(",")
+            print(llist)
+            os.chdir("repos/" + reponame)
+            subprocess.run(["git", "checkout", llist[2]])
+            os.chdir("../..")
+                
+            # get LOC for each test file
+            testfilepaths = search_files("repos/" + reponame + "/")
+            loc = 0
+            for f in testfilepaths:
+                loc += getLOC(f)
 
-        id = llist[0]
-        tag = llist[1]
-        daydiff = llist[3].strip()
-        toWrite = id + "," + tag + "," + str(loc)+ "," + daydiff
-        if len(llist) == 5:
-            daydiffhr = llist[4].strip()
-            toWrite += "," + daydiffhr
-        toWrite += "\n"
-        csv.write(toWrite)
-    csv.close
+            id = llist[0]
+            tag = llist[1]
+            daydiff = llist[3].strip()
+            toWrite = id + "," + tag + "," + str(loc)+ "," + daydiff
+            if len(llist) == 5:
+                daydiffhr = llist[4].strip()
+                toWrite += "," + daydiffhr
+                toWrite += "\n"
+            csv.write(toWrite)
+        csv.close
 
-
-
-    
 
 main()
