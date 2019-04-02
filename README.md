@@ -2,7 +2,17 @@
 
  ### Research Question: Is there a relationship between testing practices & release cycles?
  
+Team 11
+==============================
+
+### Members
+Tyler Heise, Ryan Perez, Austin Pennyfeather
  
+ Tools
+==============================
+ [Reaper tool, RepoReapers Contributors, reaper (2015)](https://reporeapers.github.io)
+ 
+
 Repositories
 ==============================
 ```
