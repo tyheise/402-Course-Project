@@ -9,7 +9,7 @@ def searchRepos(maxNumOfRepos):
     pw = getpass.getpass()
     git = Github(username, pw)
 
-    repos = git.search_repositories('stars:>10000 language:Java', sort='stars', order='desc')
+    repos = git.search_repositories('stars:>5000 language:Java', sort='stars', order='desc')
 
     f = open("reposConsidered.txt", "w")
     i=0
@@ -91,6 +91,77 @@ def getCommits():
                 if commits.totalCount > 0:
                     repoFile.write(line[1]+","+line[2]+","+commits[0].sha+","+str(until-since)+"\n")
 
+def combineCSVs():
+    csvFolder = os.path.join(os.path.curdir, "changeLOC")
+    fileList = os.listdir(csvFolder)
+    allCSVs = open("completeLOC.csv", 'w')
+
+    for fileName in fileList:
+        csvPath = os.path.join(csvFolder, fileName)
+        csv = open(csvPath, "r")
+        repoName = fileName[:len(fileName)-4]
+        for line in csv.readlines():
+            if 'dayDifference' not in line:
+                line = line.split(',')
+                days = line[3]
+                if 'day' not in days:
+                    day = 1
+                    #print(line)
+                    line[3] = str(day)
+                else:
+                    days = days.split(' ')
+                    day = days[0]
+                    line[3] = str(day)
+                line = (',').join(line)
+
+                allCSVs.write(repoName+','+line)
+
+        csv.close()
+    allCSVs.close()
+
+def getAverages():
+    csvFolder = os.path.join(os.path.curdir, "changeLOC")
+    fileList = os.listdir(csvFolder)
+
+    avgCsv = open("Avgstats.csv", 'w')
+    for fileName in fileList:
+        csvPath = os.path.join(csvFolder, fileName)
+        csv = open(csvPath, "r")
+        repoName = fileName[:len(fileName)-4]
+
+        daySum = 0
+        LOCSum = 0
+        LOCChangeSum = 0
+        lineCount = 0
+
+        for line in csv.readlines():
+            print(line)
+            # get sum of line[2], line[3], line[5]
+            if 'dayDifference' not in line:
+                line = line.strip().split(',')
+                days = line[3]
+                day = None
+                if 'day' not in days:
+                    day = 1
+                    #print(line)
+                else:
+                    days = days.split(' ')
+                    day = days[0]
+
+                daySum += int(day)
+                LOCSum += int(line[2])
+                try:
+                    LOCChangeSum += int(line[5])
+                except:
+                    LOCChangeSum += int(line[4])
+
+                lineCount += 1
+        line = [repoName, str(daySum/lineCount), str(LOCSum/lineCount), str(LOCChangeSum/lineCount)]
+        line = (',').join(line)
+        avgCsv.write(line+"\n")
+    avgCsv.close()
+    csv.close()
+
 def get_repo(repoName, git):
     repo = git.get_repo(repoName)
     return repo
@@ -112,5 +183,9 @@ if __name__== "__main__":
             getReleaseCSVs()
         elif arg == 'commits':
             getCommits()
+        elif arg == 'combine':
+            combineCSVs()
+        elif arg == 'average':
+            getAverages()
     else:
         main(sys.argv[1:])
