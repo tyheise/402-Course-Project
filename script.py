@@ -1,6 +1,7 @@
 import os
 import sys
 import getpass
+import re
 from github import Github
 from datetime import datetime
 
@@ -32,29 +33,64 @@ def getReleaseCSVs():
     git = Github(username, pw)
     reposFile = open("reposConsidered.txt", "r")
 
+    non_decimal = re.compile(r'[^\d.]+')
+
     line = reposFile.readline().strip()
     while(line):
         repo = get_repo(line, git)
         releases = repo.get_releases()
+
         releaseCount = releases.totalCount
 
         if releaseCount > 1:
             repoName = ((repo.full_name).split("/"))[1]
 
-            releaseDates = open("releaseCSVs/"+repoName+".csv", "w")
-            releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
-            prevDate = None
+            releaseDict = {}
+
+            # prevDate = None
+            print("Getting major releases from", repoName)
             for i in range(releaseCount - 1):
                 currRelease = releases[i]
-                prevRelease = releases[i+1]
+                #prevRelease = releases[i+1]
 
-                currCreatedAt = currRelease.created_at
-                prevCreatedAt = prevRelease.created_at
+                tagName  = currRelease.tag_name
+                tagName = non_decimal.sub('', tagName)
 
-                dayDifference = currCreatedAt - prevCreatedAt
+                lst  = tagName.split(".")
+                tagName = float(lst[0] + "." + lst[1][0])
 
-                releaseDates.write(repo.full_name+','+str(currRelease.id)+","+currRelease.tag_name+","+str(currCreatedAt)+","+str(prevCreatedAt)+","+str(dayDifference)+"\n")
+                if tagName not in releaseDict:
+                    releaseDict[tagName] = currRelease
+                else:
+                    if releaseDict[tagName].published_at > currRelease.published_at:
+                        releaseDict[tagName] = currRelease
 
+            relTups = releaseDict.items()
+            relTups = sorted(relTups, key=lambda x: x[0])
+
+            tupLen = len(relTups)
+
+            if tupLen > 1:
+
+                releaseDates = open("releaseCSVs/"+repoName+".csv", "w")
+                releaseDates.write("repo,id,tag_name,until,since,dayDifference\n")
+
+                for i in range(1,tupLen):
+                    prevReleaseTup = relTups[i-1]
+                    currReleaseTup = relTups[i]
+
+                    prevRelease = prevReleaseTup[1]
+                    currRelease = currReleaseTup[1]
+
+                    currCreatedAt = currRelease.published_at
+                    prevCreatedAt = prevRelease.published_at
+
+                    dayDifference = currCreatedAt - prevCreatedAt
+
+                    if prevCreatedAt < currCreatedAt:
+                        releaseDates.write(repo.full_name+','+str(currRelease.id)+","+str(currReleaseTup[0])+","+str(currCreatedAt)+","+str(prevCreatedAt)+","+str(dayDifference)+"\n")
+            else:
+                print("Skipping", repoName, "because it only has one major release")
         line = reposFile.readline().strip()
 
     reposFile.close()
@@ -73,23 +109,30 @@ def getCommits():
             csv = open(csvPath)
 
             lines = csv.readlines()
-            repoName = (lines[1].split(","))[0]
-            print("Now getting commits from", repoName)
-            repo = git.get_repo(repoName)
+            try:
+                repoName = (lines[1].split(","))[0]
+                print("Now getting commits from", repoName)
+                repo = git.get_repo(repoName)
 
-            repoName2 = (repoName.split("/"))[1]
+                repoName2 = (repoName.split("/"))[1]
 
-            repoFile = open(os.path.join(os.path.curdir,'commits',repoName2+".csv"), 'w')
-            for i in range(1,len(lines)-1):
-                line = lines[i].split(",")
+                for i in range(1,len(lines)-1):
+                    line = lines[i].split(",")
 
-                # 2019-03-26 15:08:13
-                until = datetime.strptime(line[3], '%Y-%m-%d %H:%M:%S')
-                since = datetime.strptime(line[4], '%Y-%m-%d %H:%M:%S')
+                    # 2019-03-26 15:08:13
+                    until = datetime.strptime(line[3], '%Y-%m-%d %H:%M:%S')
+                    since = datetime.strptime(line[4], '%Y-%m-%d %H:%M:%S')
 
-                commits = repo.get_commits(until=until, since=since)
-                if commits.totalCount > 0:
-                    repoFile.write(line[1]+","+line[2]+","+commits[0].sha+","+str(until-since)+"\n")
+                    commits = repo.get_commits(until=until, since=since)
+                    if commits.totalCount > 0:
+                        repoFile = open(os.path.join(os.path.curdir,'commits',repoName2+".csv"), 'a+')
+                        repoFile.write(line[1]+","+line[2]+","+commits[0].sha+","+str(until-since)+"\n")
+                        repoFile.close()
+                    else:
+                        print("Skipping release", line[2], "because there are no commits between" ,str(since), "and", str(until))
+
+            except IndexError:
+                continue
 
 def combineCSVs():
     csvFolder = os.path.join(os.path.curdir, "changeLOC")
