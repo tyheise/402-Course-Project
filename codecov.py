@@ -5,6 +5,9 @@ import glob
 import time
 
 
+def clonerep(url):
+    name = url.split("/")[-1].split(".")[0]
+    os.system("git"+ " clone " + "https://github.com/" + url + " repos/" + name + "/" )
 
 def insertIntoPom(repdir):
     # ET.register_namespace("", "http://maven.apache.org/POM/4.0.0")
@@ -19,7 +22,9 @@ def insertIntoPom(repdir):
     #     plugs[0].insert(0, cloverplug)
     #     tree.write("pom.xml")
 
-    stre = "<plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> </formats> </configuration> </plugin>"
+    # stre = "<plugin> <groupId>org.openclover</groupId> <artifactId>clover-maven-plugin</artifactId> <version>4.2.0</version> <configuration> <generateXml>true</generateXml> </configuration> </plugin>"
+
+    stre = "<reporting><plugins><plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> </formats><aggregate>true</aggregate> </configuration> </plugin></plugins></reporting>"
     fileHandle = open ( repdir + '/pom.xml',"r")
     lines = fileHandle.readlines()
     fileHandle.close()
@@ -29,10 +34,11 @@ def insertIntoPom(repdir):
     i = 0
 
     for line in lines:
-        if (line.strip() == "<plugins>"):
+        if (line.strip() == "</project>"):
             idd = i
             break
         i += 1
+    idd -= 1
 
     if idd != 0:
         lines.insert(idd+1, stre)
@@ -50,8 +56,11 @@ def insertIntoPom(repdir):
                 projend = j
                 break
             j += 1
-    
-        lines.insert(projend, "<build><plugins><plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> </formats> </configuration> </plugin> </plugins> </build>")
+        projend -= 1
+        
+        # lines.insert(projend, "<build><plugins><plugin> <groupId>org.openclover</groupId> <artifactId>clover-maven-plugin</artifactId> <version>4.2.0</version> <configuration> <generateXml>true</generateXml> </configuration> </plugin> </plugins> </build>")
+
+        lines.insert(projend, "<build><plugins><plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> </formats> <aggregate>true</aggregate></configuration> </plugin> </plugins> </build>")
 
         fileHandle = open(repdir + "/pom.xml", "w")
         contents = "".join(lines)
@@ -66,6 +75,7 @@ def insertIntoPom(repdir):
 def runcov(repdir):
     os.chdir("repos/" + repdir + "/")
     subprocess.call(["mvn", "cobertura:cobertura"])
+    # subprocess.run(["mvn", "clean" ,"clover:setup" ,"test" ,"clover:aggregate" ,"clover:clover"])
     os.chdir("../..")
 
 
@@ -99,51 +109,82 @@ def main():
     # repoURL = "https://github.com/ctripcorp/apollo.git"
     # repoURL = "https://github.com/shuzheng/zheng.git"
     # repoURL = "https://github.com/alibaba/arthas.git"
-    repoURL = "https://github.com/openzipkin/zipkin"
+    # repoURL = "https://github.com/openzipkin/zipkin"
+    """
+JakeWharton/ActionBarSherlock
+ liaohuqiu/android-Ultra-Pull-To-Refresh
+ ctripcorp/apollo
+ alibaba/arthas
+ google/auto
+ alibaba/canal
+ dbeaver/dbeaver
+ dropwizard/dropwizard
+ alibaba/druid
+ alibaba/fastjson
+ google/guava
+ google/guice
+ hankcs/HanLP
+ apache/incubator-druid
+ apache/incubator-dubbo
+ apache/incubator-shardingsphere
+ xetorthio/jedis
+ junit-team/junit4
+ libgdx/libgdx
+ mybatis/mybatis-3
+ naver/pinpoint
+ proxyee-down-org/proxyee-down
+ redisson/redisson
+ square/retrofit
+ spring-projects/spring-boot
+ b3log/symphony
+ code4craft/webmagic
+ xuxueli/xxl-job
+ openzipkin/zipkin
+ zxing/zxing
+ """
+    hardcodedList = ["openzipkin/zipkin"]
 
-    repdir = repoURL.split("/")[-1]
-    repdir = repdir.split(".")[0]
-    repoPath = "repos/"
-    # subprocess.run(["rm", "-r", "-f", "zipkin/"])
-    # subprocess.run(["git", "clone", repoURL])
-  
-
-
-    # for a single repo...
-    coms = open("commits/" + repdir + ".csv")
-    lines = coms.readlines()
-
-    csv = open("codecov/" + repdir + ".csv", "w")
-    csv.write("id,tag_name,covpercent,dayDifference, dayDifferenceHours\n")
-
-    for line in lines:
-        llist = line.split(",")
-        print(llist)
-        os.chdir("repos/" + repdir)
-        subprocess.run(["git", "checkout", llist[2]])
-        subprocess.run(["git", "checkout", "--", "."])
-        os.chdir("../..")
+    for hardcoded in hardcodedList:
         
-        insertIntoPom("repos/" + repdir)
+        clonerep(hardcoded)
+        repdir = hardcoded.split("/")[-1].split(".")[0]
+    
+        # for a single repo...
+        coms = open("commits/" + repdir + ".csv")
+        lines = coms.readlines()
 
-        #codecov lines
-        runcov(repdir)
-        codeCovFiles = getAllCovXML(repdir)
-        if (len(codeCovFiles) == 0):
-            print("NO COV FILES FOUND SKIP")
-            continue
-        totalCoveragePercent = getTotalCodeCov(codeCovFiles)
+        csv = open("codecov/" + repdir + ".csv", "w")
+        csv.write("id,tag_name,covpercent,dayDifference, dayDifferenceHours\n")
 
-        id = llist[0]
-        tag = llist[1]
-        daydiff = llist[3].strip()
-        toWrite = id + "," + tag + "," + str(totalCoveragePercent)+ "," + daydiff
-        if len(llist) == 5:
-            daydiffhr = llist[4].strip()
-            toWrite += "," + daydiffhr
-        toWrite += "\n"
-        csv.write(toWrite)
-    csv.close
+        for line in lines:
+            llist = line.split(",")
+            print(llist)
+            os.chdir("repos/" + repdir)
+            subprocess.run(["git", "checkout", "--", "."])
+            subprocess.run(["git", "checkout", llist[2]])
+            subprocess.run(["git", "checkout", "--", "."])
+            os.chdir("../..")
+            
+            insertIntoPom("repos/" + repdir)
+
+            #codecov lines
+            runcov(repdir)
+            codeCovFiles = getAllCovXML(repdir)
+            if (len(codeCovFiles) == 0):
+                print("NO COV FILES FOUND SKIP")
+                continue
+            totalCoveragePercent = getTotalCodeCov(codeCovFiles)
+
+            id = llist[0]
+            tag = llist[1]
+            daydiff = llist[3].strip()
+            toWrite = id + "," + tag + "," + str(totalCoveragePercent)+ "," + daydiff
+            if len(llist) == 5:
+                daydiffhr = llist[4].strip()
+                toWrite += "," + daydiffhr
+            toWrite += "\n"
+            csv.write(toWrite)
+        csv.close
 
 
 
