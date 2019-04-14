@@ -24,7 +24,7 @@ def insertIntoPom(repdir):
 
     # stre = "<plugin> <groupId>org.openclover</groupId> <artifactId>clover-maven-plugin</artifactId> <version>4.2.0</version> <configuration> <generateXml>true</generateXml> </configuration> </plugin>"
 
-    stre = "<reporting><plugins><plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> </formats><aggregate>true</aggregate> </configuration> </plugin></plugins></reporting>"
+    stre = "<plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> </formats><aggregate>true</aggregate> </configuration> </plugin>"
     fileHandle = open ( repdir + '/pom.xml',"r")
     lines = fileHandle.readlines()
     fileHandle.close()
@@ -34,7 +34,7 @@ def insertIntoPom(repdir):
     i = 0
 
     for line in lines:
-        if (line.strip() == "</project>"):
+        if (line.strip() == "<plugin>"):
             idd = i
             break
         i += 1
@@ -111,38 +111,30 @@ def main():
     # repoURL = "https://github.com/alibaba/arthas.git"
     # repoURL = "https://github.com/openzipkin/zipkin"
     """
-JakeWharton/ActionBarSherlock
- liaohuqiu/android-Ultra-Pull-To-Refresh
- ctripcorp/apollo
- alibaba/arthas
- google/auto
- alibaba/canal
- dbeaver/dbeaver
- dropwizard/dropwizard
- alibaba/druid
- alibaba/fastjson
- google/guava
- google/guice
- hankcs/HanLP
- apache/incubator-druid
- apache/incubator-dubbo
- apache/incubator-shardingsphere
- xetorthio/jedis
- junit-team/junit4
- libgdx/libgdx
- mybatis/mybatis-3
- naver/pinpoint
- proxyee-down-org/proxyee-down
- redisson/redisson
- square/retrofit
- spring-projects/spring-boot
- b3log/symphony
- code4craft/webmagic
- xuxueli/xxl-job
- openzipkin/zipkin
- zxing/zxing
+  'ctripcorp/apollo'
+  'google/auto'
+  'dbeaver/dbeaver'
+  'dropwizard/dropwizard'
+  'google/guava'
+  'google/guice'
+  'hankcs/HanLP'
+  'apache/incubator-druid'
+  'apache/incubator-shardingsphere'
+  'xetorthio/jedis'
+
+  'mybatis/mybatis-3'
+  'naver/pinpoint'
+  'proxyee-down-org/proxyee-down'
+  'redisson/redisson'
+  'spring-projects/spring-boot'
+  'b3log/symphony'
+  'code4craft/webmagic'
+  'xuxueli/xxl-job'
+  'openzipkin/zipkin'
  """
-    hardcodedList = ["openzipkin/zipkin"]
+
+
+    hardcodedList = ['ctripcorp/apollo',  'google/auto',  'dbeaver/dbeaver',  'dropwizard/dropwizard',  'google/guava',  'google/guice',  'hankcs/HanLP',  'apache/incubator-druid',  'apache/incubator-shardingsphere',  'xetorthio/jedis',  'mybatis/mybatis-3',  'naver/pinpoint',  'proxyee-down-org/proxyee-down',  'redisson/redisson',  'spring-projects/spring-boot',  'b3log/symphony',  'code4craft/webmagic',  'xuxueli/xxl-job',  'openzipkin/zipkin']
 
     for hardcoded in hardcodedList:
         
