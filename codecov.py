@@ -33,15 +33,30 @@ def insertIntoPom(repdir):
     idd = 0
     i = 0
 
+    alreadyHas = False
+    alreadyI = 0
+    alreadyIndex = 0
+
+    for line in lines:
+        if (line.strip() == "<artifactId>cobertura-maven-plugin</artifactId>"):
+            alreadyIndex = alreadyI
+            break
+        alreadyI += 1
+
     for line in lines:
         if (line.strip() == "<plugin>"):
             idd = i
             break
         i += 1
-    idd -= 1
 
-    if idd != 0:
-        lines.insert(idd+1, stre)
+    if alreadyIndex:
+        lines.insert(alreadyIndex, "<configuration> <formats> <format>html</format> <format>xml</format> </formats><aggregate>true</aggregate> </configuration>")
+        fileHandle = open(repdir + "/pom.xml", "w")
+        contents = "".join(lines)
+        fileHandle.write(contents)
+        fileHandle.close()
+    elif idd != 0:
+        lines.insert(idd, stre)
 
         fileHandle = open(repdir + "/pom.xml", "w")
         contents = "".join(lines)
@@ -56,7 +71,7 @@ def insertIntoPom(repdir):
                 projend = j
                 break
             j += 1
-        projend -= 1
+        #projend -= 1
         
         # lines.insert(projend, "<build><plugins><plugin> <groupId>org.openclover</groupId> <artifactId>clover-maven-plugin</artifactId> <version>4.2.0</version> <configuration> <generateXml>true</generateXml> </configuration> </plugin> </plugins> </build>")
 
@@ -74,7 +89,7 @@ def insertIntoPom(repdir):
 # runs cobertura
 def runcov(repdir):
     os.chdir("repos/" + repdir + "/")
-    subprocess.call(["mvn", "cobertura:cobertura"])
+    subprocess.call(["mvn", "cobertura:cobertura", "-Dlicense.skip=true"])
     # subprocess.run(["mvn", "clean" ,"clover:setup" ,"test" ,"clover:aggregate" ,"clover:clover"])
     os.chdir("../..")
 
@@ -113,20 +128,19 @@ def main():
     """
   'ctripcorp/apollo'
   'google/auto'
-  'dbeaver/dbeaver'
+  'low perc dbeaver/dbeaver'
   'dropwizard/dropwizard'
-  'google/guava'
+  'low perc google/guava'
   'google/guice'
-  'hankcs/HanLP'
+  'failed build hankcs/HanLP'
   'apache/incubator-druid'
   'apache/incubator-shardingsphere'
   'xetorthio/jedis'
-
   'mybatis/mybatis-3'
   'naver/pinpoint'
-  'proxyee-down-org/proxyee-down'
-  'redisson/redisson'
-  'spring-projects/spring-boot'
+  'broken builds proxyee-down-org/proxyee-down'
+  'broken builds redisson/redisson'
+  'broken build spring-projects/spring-boot'
   'b3log/symphony'
   'code4craft/webmagic'
   'xuxueli/xxl-job'
@@ -134,7 +148,8 @@ def main():
  """
 
 
-    hardcodedList = ['ctripcorp/apollo',  'google/auto',  'dbeaver/dbeaver',  'dropwizard/dropwizard',  'google/guava',  'google/guice',  'hankcs/HanLP',  'apache/incubator-druid',  'apache/incubator-shardingsphere',  'xetorthio/jedis',  'mybatis/mybatis-3',  'naver/pinpoint',  'proxyee-down-org/proxyee-down',  'redisson/redisson',  'spring-projects/spring-boot',  'b3log/symphony',  'code4craft/webmagic',  'xuxueli/xxl-job',  'openzipkin/zipkin']
+    # hardcodedList = ['ctripcorp/apollo',  'google/auto',  'dbeaver/dbeaver',  'dropwizard/dropwizard',  'google/guava',  'google/guice',  'hankcs/HanLP',  'apache/incubator-druid',  'apache/incubator-shardingsphere',  'xetorthio/jedis']
+    hardcodedList = ['openzipkin/zipkin']
 
     for hardcoded in hardcodedList:
         
@@ -178,7 +193,9 @@ def main():
             csv.write(toWrite)
         csv.close
 
-
-
-
 main()
+
+# codeCovFiles = getAllCovXML("auto")
+# totalCoveragePercent = getTotalCodeCov(codeCovFiles)
+# print(totalCoveragePercent)
+

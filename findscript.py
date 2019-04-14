@@ -1,9 +1,11 @@
 import os
 import subprocess
 
-hardcodedlist = "JakeWharton/ActionBarSherlock liaohuqiu/android-Ultra-Pull-To-Refresh ctripcorp/apollo alibaba/arthas google/auto alibaba/canal dbeaver/dbeaver dropwizard/dropwizard alibaba/druid alibaba/fastjson google/guava google/guice hankcs/HanLP apache/incubator-druid apache/incubator-dubbo apache/incubator-shardingsphere xetorthio/jedis junit-team/junit4 libgdx/libgdx mybatis/mybatis-3 naver/pinpoint proxyee-down-org/proxyee-down redisson/redisson square/retrofit spring-projects/spring-boot b3log/symphony code4craft/webmagic xuxueli/xxl-job openzipkin/zipkin zxing/zxing".split(" ")
-
-
+# hardcodedlist = "JakeWharton/ActionBarSherlock liaohuqiu/android-Ultra-Pull-To-Refresh ctripcorp/apollo alibaba/arthas google/auto alibaba/canal dbeaver/dbeaver dropwizard/dropwizard alibaba/druid alibaba/fastjson google/guava google/guice hankcs/HanLP apache/incubator-druid apache/incubator-dubbo apache/incubator-shardingsphere xetorthio/jedis junit-team/junit4 libgdx/libgdx mybatis/mybatis-3 naver/pinpoint proxyee-down-org/proxyee-down redisson/redisson square/retrofit spring-projects/spring-boot b3log/symphony code4craft/webmagic xuxueli/xxl-job openzipkin/zipkin zxing/zxing".split(" ")
+# hardcodedlist = ['ctripcorp/apollo',  'google/auto',  'dbeaver/dbeaver',  'dropwizard/dropwizard',  'google/guava',  'google/guice',  'hankcs/HanLP',  'apache/incubator-druid',  'apache/incubator-shardingsphere',  'xetorthio/jedis']
+# hardcodedlist = ['apache/incubator-shardingsphere', ]
+# hardcodedlist = ['xetorthio/jedis',  'mybatis/mybatis-3',  'naver/pinpoint',  'broken builds proxyee-down-org/proxyee-down',  'broken builds redisson/redisson',  'broken build spring-projects/spring-boot',  'b3log/symphony',  'code4craft/webmagic',  'xuxueli/xxl-job',  'openzipkin/zipkin']
+hardcodedlist = ['ctripcorp/apollo',  'google/auto',  'low perc dbeaver/dbeaver',  'dropwizard/dropwizard',  'low perc google/guava',  'google/guice',  'failed build hankcs/HanLP',  'apache/incubator-druid',  'apache/incubator-shardingsphere',  'xetorthio/jedis',  'mybatis/mybatis-3',  'naver/pinpoint',  'broken builds proxyee-down-org/proxyee-down',  'broken builds redisson/redisson',  'broken build spring-projects/spring-boot',  'b3log/symphony',  'code4craft/webmagic',  'xuxueli/xxl-job',  'openzipkin/zipkin']
 def search_files(directory='.', extension='java'):
     testfiles = []
     extension = extension.lower()
@@ -19,6 +21,8 @@ def search_files(directory='.', extension='java'):
 def getLOC(filepath):
     clocstr = subprocess.check_output("cloc " + filepath + " --csv", shell=True).decode('ascii').split(",")[-1].strip()
     # print("LOC FOR " + filepath + " " + clocstr)
+    if clocstr.startswith('0 text files.'):
+        return 0
     return int(clocstr)
     # i = 0
     # with open(filepath) as f:
@@ -97,7 +101,11 @@ JakeWharton/ActionBarSherlock
             llist = line.split(",")
             print(llist)
             os.chdir("repos/" + reponame)
+            subprocess.run(["git", "checkout", "--", "."])
+
             subprocess.run(["git", "checkout", llist[2]])
+            subprocess.run(["git", "checkout", "--", "."])
+
             os.chdir("../..")
                 
             # get LOC for each test file
