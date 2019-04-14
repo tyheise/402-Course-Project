@@ -17,15 +17,18 @@ def search_files(directory='.', extension='java'):
 
 
 def getLOC(filepath):
-    i = 0
-    with open(filepath) as f:
-        for i, l in enumerate(f):
-            pass
+    clocstr = subprocess.check_output("cloc " + filepath + " --csv", shell=True).decode('ascii').split(",")[-1].strip()
+    # print("LOC FOR " + filepath + " " + clocstr)
+    return int(clocstr)
+    # i = 0
+    # with open(filepath) as f:
+    #     for i, l in enumerate(f):
+    #         pass
 
-    if i:
-        return i + 1
-    else:
-        return 0
+    # if i:
+    #     return i + 1
+    # else:
+    #     return 0
 
 
 
@@ -100,7 +103,7 @@ JakeWharton/ActionBarSherlock
             # get LOC for each test file
             testfilepaths = search_files("repos/" + reponame + "/")
             loc = 0
-            for f in testfilepaths:
+            for f in testfilepaths:                
                 loc += getLOC(f)
 
             id = llist[0]
