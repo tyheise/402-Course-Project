@@ -19,36 +19,36 @@ Tyler Heise, Ryan Perez, Austin Pennyfeather
 
 Repositories
 ==============================
-[ActionBarSherlock]()
-[android-Ultra-Pull-To-Refresh]()
-[apollo]()
-[arthas]()
-[auto]()
-[canal]()
-[dbeaver]()
-[dropwizard]()
-[druid]()
-[fastjson]()
-[guava]()
-[guice]()
-[HanLP]()
-[incubator-druid]()
-[incubator-dubbo]()
-[incubator-shardingsphere]()
-[jedis]()
-[junit4]()
-[libgdx]()
-[mybatis-3]()
-[pinpoint]()
-[proxyee-down]()
-[redisson]()
-[retrofit]()
-[spring-boot]()
-[symphony]()
-[webmagic]()
-[xxl-job]()
-[zipkin]()
-[zxing]()
+[ActionBarSherlock]() \
+[android-Ultra-Pull-To-Refresh]() \
+[apollo]() \
+[arthas]() \ 
+[auto]() \
+[canal]() \
+[dbeaver]() \
+[dropwizard]() \
+[druid]() \
+[fastjson]() \
+[guava]() \
+[guice]() \
+[HanLP]() \
+[incubator-druid]() \
+[incubator-dubbo]() \
+[incubator-shardingsphere]() \
+[jedis]() \
+[junit4]() \
+[libgdx]() \
+[mybatis-3]() \
+[pinpoint]() \
+[proxyee-down]() \
+[redisson]() \
+[retrofit]() \
+[spring-boot]() \
+[symphony]() \
+[webmagic]() \
+[xxl-job]() \
+[zipkin]() \
+[zxing]() 
 
 
 Replication Instructions
