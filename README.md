@@ -56,6 +56,20 @@ Repositories
 Replication Instructions
 ==============================
 
+### Step 0: Download R and R Studio
+```
+These steps apply specifically to windows users. If you have another operating system, the same steps apply just choose the files that apply to your operating system.
+
+1. Download R from http://cran.us.r-project.org/.
+
+2. Click on Download R for Windows. Click base. Click on Download R-3.5.3 for Windows (32/64 bit) (or a newer version that appears).
+
+3. Install R. Leave all default settings in the installation options
+
+4. Download RStudio Desktop for windows from http://rstudio.org/download/desktop. Select Download (RStudio Desktop Open Source License). It will allow you to select from a list of installers. Choose (it should be called something like RStudio 1.2.1335 - Windows 7+. Choose default installation options.
+
+5. Open RStudio.
+```
 
 ### Step 1: Setting up project and navigating to root directory
 ```
