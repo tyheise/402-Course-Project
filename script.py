@@ -134,7 +134,7 @@ def getCommits():
             except IndexError:
                 continue
 
-def combineCSVs():
+def combineCommitCSVs():
     csvFolder = os.path.join(os.path.curdir, "changeLOC")
     fileList = os.listdir(csvFolder)
     allCSVs = open("completeLOC.csv", 'w')
@@ -148,9 +148,42 @@ def combineCSVs():
                 line = line.split(',')
                 days = line[3]
                 if 'day' not in days:
+                    #print(line)
                     day = 1
                     #print(line)
                     line[3] = str(day)
+                    line.append(line[4])
+                    line[4] = str(0)
+                else:
+                    days = days.split(' ')
+                    day = days[0]
+                    line[3] = str(day)
+                line = (',').join(line)
+
+                allCSVs.write(repoName+','+line)
+
+        csv.close()
+    allCSVs.close()
+
+def combineCovCSVs():
+    csvFolder = os.path.join(os.path.curdir, "codecov")
+    fileList = os.listdir(csvFolder)
+    allCSVs = open("completeCodeCov.csv", 'w')
+
+    for fileName in fileList:
+        csvPath = os.path.join(csvFolder, fileName)
+        csv = open(csvPath, "r")
+        repoName = fileName[:len(fileName)-4]
+        print("Now parsing", repoName)
+        for line in csv.readlines():
+            if 'dayDifference' not in line:
+                line = line.split(',')
+                days = line[3]
+                if 'day' not in days:
+                    #print(repoName, line)
+                    day = 1
+                    #print(line)
+                    line[3] = str(day)+"\n"
                 else:
                     days = days.split(' ')
                     day = days[0]
@@ -178,7 +211,7 @@ def getAverages():
         lineCount = 0
 
         for line in csv.readlines():
-            print(line)
+            #print(line)
             # get sum of line[2], line[3], line[5]
             if 'dayDifference' not in line:
                 line = line.strip().split(',')
@@ -227,7 +260,8 @@ if __name__== "__main__":
         elif arg == 'commits':
             getCommits()
         elif arg == 'combine':
-            combineCSVs()
+            combineCommitCSVs()
+            combineCovCSVs()
         elif arg == 'average':
             getAverages()
     else:
