@@ -5,7 +5,7 @@ import subprocess
 # hardcodedlist = ['ctripcorp/apollo',  'google/auto',  'dbeaver/dbeaver',  'dropwizard/dropwizard',  'google/guava',  'google/guice',  'hankcs/HanLP',  'apache/incubator-druid',  'apache/incubator-shardingsphere',  'xetorthio/jedis']
 # hardcodedlist = ['apache/incubator-shardingsphere', ]
 # hardcodedlist = ['xetorthio/jedis',  'mybatis/mybatis-3',  'naver/pinpoint',  'broken builds proxyee-down-org/proxyee-down',  'broken builds redisson/redisson',  'broken build spring-projects/spring-boot',  'b3log/symphony',  'code4craft/webmagic',  'xuxueli/xxl-job',  'openzipkin/zipkin']
-hardcodedlist = ['ctripcorp/apollo',  'google/auto',  'low perc dbeaver/dbeaver',  'dropwizard/dropwizard',  'low perc google/guava',  'google/guice',  'failed build hankcs/HanLP',  'apache/incubator-druid',  'apache/incubator-shardingsphere',  'xetorthio/jedis',  'mybatis/mybatis-3',  'naver/pinpoint',  'broken builds proxyee-down-org/proxyee-down',  'broken builds redisson/redisson',  'broken build spring-projects/spring-boot',  'b3log/symphony',  'code4craft/webmagic',  'xuxueli/xxl-job',  'openzipkin/zipkin']
+hardcodedlist = ['ctripcorp/apollo', 'google/auto', 'dbeaver/dbeaver', 'dropwizard/dropwizard', 'google/guava', 'google/guice', 'hankcs/HanLP', 'apache/incubator-druid', 'apache/incubator-shardingsphere', 'xetorthio/jedis', 'mybatis/mybatis-3', 'naver/pinpoint', 'proxyee-down-org/proxyee-down', 'redisson/redisson', 'spring-projects/spring-boot', 'b3log/symphony', 'code4craft/webmagic', 'xuxueli/xxl-job', 'openzipkin/zipkin']
 def search_files(directory='.', extension='java'):
     testfiles = []
     extension = extension.lower()
@@ -50,6 +50,7 @@ def t():
 
 def clonerep(url):
     name = url.split("/")[-1].split(".")[0]
+    print("git"+ " clone " + "https://github.com/" + url + " repos/" + name + "/")
     os.system("git"+ " clone " + "https://github.com/" + url + " repos/" + name + "/" )
 
 def main(hardcodedlist):
@@ -88,7 +89,7 @@ JakeWharton/ActionBarSherlock
     for hardcoded in hardcodedlist:
         clonerep(hardcoded)
         reponame = hardcoded.split("/")[-1].split(".")[0]
-        
+
         coms = open("commits/" + reponame + ".csv")
         lines = coms.readlines()
         #     print(lines)
@@ -107,11 +108,11 @@ JakeWharton/ActionBarSherlock
             subprocess.run(["git", "checkout", "--", "."])
 
             os.chdir("../..")
-                
+
             # get LOC for each test file
             testfilepaths = search_files("repos/" + reponame + "/")
             loc = 0
-            for f in testfilepaths:                
+            for f in testfilepaths:
                 loc += getLOC(f)
 
             id = llist[0]
@@ -136,16 +137,13 @@ def getLOCChanges(hardcodedlist):
         for l in lines[1:]:
             LOClist.append(int(l.split(",")[2].strip()))
             i += 1
-        
+
         LOCChangelist = []
         i = 0
         while i < len(LOClist) - 1:
-            LOCChangelist.append(LOClist[i] - LOClist[i+1])
+            LOCChangelist.append(-1*(LOClist[i] - LOClist[i+1]))
             i+= 1
-        LOCChangelist.append(0)
-
-        # print(LOClist)
-        # print(LOCChangelist)
+        LOCChangelist = [0] + LOCChangelist
 
         newCSV = open("changeLOC/" + reponame + ".csv", "w")
         newCSV.write(lines[0].strip() + ",changeLOC\n")
@@ -154,7 +152,8 @@ def getLOCChanges(hardcodedlist):
         for l in lines[1:]:
             newCSV.write(l.strip() + "," + str(LOCChangelist[i]) + "\n")
             i+=1
+        newCSV.close()
 
-
-main(hardcodedlist)
-getLOCChanges(hardcodedlist)
+if __name__ == '__main__':
+    main(hardcodedlist)
+    getLOCChanges(hardcodedlist)
