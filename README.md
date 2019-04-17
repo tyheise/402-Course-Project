@@ -119,10 +119,11 @@ These steps apply specifically to windows users. If you have another operating s
 #### Step 4: How to get the code coverage for the respective repositiroes.
 ```
 # Execute the script
-1. python3 codecov.py
+1. python3 findscript.py
+2. python3 codecov.py
 
 # Code coverage will be stored in a folder called "codeCov" at the root directory as .csv files as the name of the repository.
-2. For example: "codeCov/{repository name}.csv"
+3. For example: "codeCov/{repository name}.csv"
 ```
 
 #### Step 5: We compile all .csv in Steps 1 - Steps 4 into two large .csv files to get complete lines of code and complete code coverage:
