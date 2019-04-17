@@ -13,6 +13,13 @@ Research Questions
  ### Research Question 1: Is there a relationship between testing practices & release cycles?
  ### Research Question 2: Does the length of release cycles affect the quality of tests written?
  
+Research Questions
+==============================
+See the results folder for the graphs we generated. 
+See codecov folder for code coverage data we gathered
+See LOC folder for the LOC data we gathered
+See changeLOC folder for change in testing lines of code data we gathered
+ 
  Tools
 ==============================
  [Cobertural](https://cobertura.github.io/cobertura/) is a free Java tool that calculates the percentage of code accessed by tests. It can be used to identify which parts of your Java program are lacking test coverage. It is based on jcoverage. 
