@@ -90,7 +90,6 @@ Replication Instructions
 ```
 
 #### Step 3: How to get the commits from the respetive repositories.
-
 ```
  # Execute the script
  1. python3 script.py commits
@@ -98,20 +97,28 @@ Replication Instructions
  # Enter your Github credentials to clone the list of 30 repsositores.
  2. prompt "Github Username:"
     prompt to enter password:
-    
-
-
+ # Commits will be stored in a folder called "commits" at the root directory as a .csv files as the name of the reposiotry.
+ 3. For example: "commits/{repository name}.csv"
 ```
 
-#### How to generate the .csv for code coverage
+#### Step 4: How to get the code coverage for the respective repositiroes.
+```
+# Execute the script
+1. python3 codecov.py
+
+# Code coverage will be stored in a folder called "codeCov" at the root directory as .csv files as the name of the repository.
+2. For example: "codeCov/{repository name}.csv"
 ```
 
+### Step 5: We compile all .csv in Steps 1 - Steps 4 into two large .csv files to get complete lines of code and complete code coverage:
+```
+# Execute the script
+1. python3 script.py combine
+
+# complete lines of code and complete code coverage will be will be stored in the respective file names "completeLOC.csv"
+# and completeCodeCov.csv at the root direcotry
 ```
 
-### How to generate the scatterplots form the code coverage .csv files
-```
-
-
-```
+### Step 6: 
 
 
