@@ -15,9 +15,9 @@ Research Questions
  
 Research Questions
 ==============================
-See the results folder for the graphs we generated. 
-See codecov folder for code coverage data we gathered
-See LOC folder for the LOC data we gathered
+See the results folder for the graphs we generated. \
+See codecov folder for code coverage data we gathered. \
+See LOC folder for the LOC data we gathered. \
 See changeLOC folder for change in testing lines of code data we gathered
  
  Tools
