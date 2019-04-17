@@ -132,8 +132,7 @@ These steps apply specifically to windows users. If you have another operating s
 # complete lines of code and complete code coverage will be will be stored in the respective file names "completeLOC.csv"
 # and completeCodeCov.csv at the root direcotry
 ```
-##### Disclaimer: Before proceeding to attempt to execute Steps 6,7 and 8.<br/> Ensure that you complete "Download R and R Studio". Inaddition. IMPORTANT: When executing R studio, select and verify that your working direcotry is set to the root of the project folder.
-Example: C:\Users\User\Desktop\cmput402\402-Course-Project
+##### Disclaimer: Before proceeding to attempt to execute Steps 6,7 and 8.<br/> Ensure that you complete "Download R and R Studio". Inaddition. IMPORTANT: When executing R studio, select and verify that your working direcotry is set to the root of the project folder. Example: C:\Users\User\Desktop\cmput402\402-Course-Project
 
 #### Step 6: How to generate the graphs: Scatter plot, box plot and denisty plots for lines of code across all repositories
 ````
