@@ -15,8 +15,9 @@ Research Questions
  
  Tools
 ==============================
- [Cobertural](https://cobertura.github.io/cobertura/) \
- [CLOC](http://cloc.sourceforge.net/)
+ [Cobertural](https://cobertura.github.io/cobertura/) is a free Java tool that calculates the percentage of code accessed by tests. It can be used to identify which parts of your Java program are lacking test coverage. It is based on jcoverage. 
+ 
+ [CLOC](http://cloc.sourceforge.net/)  counts blank lines, comment lines, and physical lines of source code in many programming languages
  
 
 Repositories
