@@ -2,19 +2,21 @@ library(tidyverse)
 library(ggplot2)
 
 
+setwd(dir = getwd())
+print(getwd())
+toPath <- (paste(getwd(),"codecov",sep="/"))
+print(getwd())
 
-
-setwd(paste(getwd(),"codecov",sep="/"))
-csv_list = list.files(pattern="*.csv")
+#setwd(paste(getwd(),"codecov",sep="/"))
+csv_list = list.files(path = toPath, pattern="*.csv")
 print(csv_list)
 
-
-jpg_csv_path <- (paste(getwd(),"codecov_jpg",sep="/"))
+jpg_csv_path <- (paste(getwd(),"codeCoverageScatterPlots",sep="/"))
 dir.create(jpg_csv_path)
 print(jpg_csv_path)
 
-
-
+setwd(toPath)
+getwd()
 
 
 for(i in 1:length(csv_list)){
