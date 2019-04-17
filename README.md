@@ -57,7 +57,7 @@ Replication Instructions
 ==============================
 
 
-### Setting up project and navigating to root directory
+### Step 1: Setting up project and navigating to root directory
 ```
   # Create a virtual environment
   1. python3 virtualenv venv
@@ -74,16 +74,32 @@ Replication Instructions
   # Naviage to location where you cloned the repository
   5. cd 402-Course-Project
 ```
+##### Disclaimer: Before proceeding to attempt to execute the following instructions.<br/> Ensure that you complete "Setting up project and navigating to root directory"
 
-#### How to calculate LOC and changed LOC in between releases
-
+#### Step 2: How to get the major releases from the respetive repositories into .csv files
+```
+ # Execute the script
+ 1. python3 script.py csv
+ 
+ # Enter your Github credentials to clone the list of 30 repsositores.
+ 2. prompt "Github Username:"
+    prompt to enter password:
+ 
+ # Major releases will be stored in a folder called "releaseCVS" at the root directory as a .csv files as the name of the reposiotry.
+ 3. For example: "releaseCSVs/{repository name}.csv"
 ```
 
-```
-
-#### How to get the branch and statement coverage from a repository 
+#### Step 3: How to get the commits from the respetive repositories.
 
 ```
+ # Execute the script
+ 1. python3 script.py commits
+ 
+ # Enter your Github credentials to clone the list of 30 repsositores.
+ 2. prompt "Github Username:"
+    prompt to enter password:
+    
+
 
 ```
 
