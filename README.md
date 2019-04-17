@@ -145,5 +145,9 @@ Replication Instructions
 
 # 
 
-``
+```
 
+#### How to generate the .csv for code coverage
+```
+
+```
