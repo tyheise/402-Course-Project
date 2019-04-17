@@ -22,7 +22,7 @@ Repositories
 [ActionBarSherlock]() \
 [android-Ultra-Pull-To-Refresh]() \
 [apollo]() \
-[arthas]() \ 
+[arthas]() \
 [auto]() \
 [canal]() \
 [dbeaver]() \
