@@ -124,7 +124,7 @@ These steps apply specifically to windows users. If you have another operating s
 2. For example: "codeCov/{repository name}.csv"
 ```
 
-### Step 5: We compile all .csv in Steps 1 - Steps 4 into two large .csv files to get complete lines of code and complete code coverage:
+#### Step 5: We compile all .csv in Steps 1 - Steps 4 into two large .csv files to get complete lines of code and complete code coverage:
 ```
 # Execute the script
 1. python3 script.py combine
@@ -132,7 +132,70 @@ These steps apply specifically to windows users. If you have another operating s
 # complete lines of code and complete code coverage will be will be stored in the respective file names "completeLOC.csv"
 # and completeCodeCov.csv at the root direcotry
 ```
+##### Disclaimer: Before proceeding to attempt to execute Steps 6,7 and 8.<br/> Ensure that you complete "Download R and R Studio". Inaddition. IMPORTANT: When executing R studio, select and verify that your working direcotry is set to the root of the project folder.
+Example: C:\Users\User\Desktop\cmput402\402-Course-Project
 
-### Step 6: 
+#### Step 6: How to generate the graphs: Scatter plot, box plot and denisty plots for lines of code across all repositories
+````
+1. Open RStudio.
+2. Select the project folder "402-Course-Project" and open the file LOC.R
+3. Verify that the working directory you are currently in is Example: "C:\Users\User\Desktop\cmput402\402-Course-Project"
+4. Execute the Script
+5. The graphs mentioned above will be stored at the root directory of the project folder.
+   For Example:
+      LOCBox.jpeg
+      LOCChangeBox.jpeg	
+      LOCChangeDense.jpeg
+      LOCChangeScatter.jpeg	
+      LOCDaysBox.jpeg	
+      LOCDaysDensejpeg	
+      LOCScatter.jpeg
+      
+# These steps are incase the file does not execute. 
+6. Select "Session" at the top panel and select "Set working directory".
+7. Select "Choose Directory" and locate where you saved the "402-Course-Project"
+8. Select and set the working directory as for Example: "C:\Users\User\Desktop\cmput402\402-Course-Project"
+9. Follow Steps 3-5
+````
+#### Step 7: How to generate the graphs: Scatter plot, box plot and denisty plots for code coverage across all repositories
+```
+# If you have not completed the Steps in Step 6:"How to generate the graphs: Scatter plot, box plot and denisty plots for lines of code across all repositories" up until steps 1-3, follow all steps below: 
+
+1. Open RStudio.
+2. Select the project folder "402-Course-Project" and open the file coverage.R
+3. Verify that the working directory you are currently in is Example: "C:\Users\User\Desktop\cmput402\402-Course-Project"
+4. Execute the Script
+5. The graphs mentioned above will be stored at the root directory of the project folder.
+   For Example:
+       covDaysBox.jpeg	
+       covDaysDense.jpeg	
+       covPercentBox.jpeg	
+       covPercentDense.jpeg	
+       covScatter.jpeg
+      
+# These steps are incase the file does not execute. 
+6. Select "Session" at the top panel and select "Set working directory".
+7. Select "Choose Directory" and locate where you saved the "402-Course-Project"
+8. Select and set the working directory as for Example: "C:\Users\User\Desktop\cmput402\402-Course-Project"
+9. Follow Steps 3-5
+```
+
+#### Step 8: How to generate the scatter plots for the individual repositiores in regards to code coverage
+```
+# If you have not completed the Steps in Step 6:"How to generate the graphs: Scatter plot, box plot and denisty plots for lines of code across all repositories" up until steps 1-3, follow all steps below: 
+
+1. Open RStudio.
+2. Select the project folder "402-Course-Project" and open the file get_code_coverage.R
+3. Verify that the working directory you are currently in is Example: "C:\Users\User\Desktop\cmput402\402-Course-Project"
+4. Execute the Script
+5. The scatter plots will be stored in a folder called "codeCoverageScatterPlots" at the root directory.
+
+# These steps are incase the file does not execute. 
+6. Select "Session" at the top panel and select "Set working directory".
+7. Select "Choose Directory" and locate where you saved the "402-Course-Project"
+8. Select and set the working directory as for Example: "C:\Users\User\Desktop\cmput402\402-Course-Project"
+9. Follow Steps 3-5
+```
+
 
 
