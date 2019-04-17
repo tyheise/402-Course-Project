@@ -7,6 +7,8 @@ Team 11
 ### Members
 Tyler Heise, Ryan Perez, Austin Pennyfeather
 
+Research Questions
+==============================
 
  ### Research Question 1: Is there a relationship between testing practices & release cycles?
  ### Research Question 2: Does the length of release cycles affect the quality of tests written?
