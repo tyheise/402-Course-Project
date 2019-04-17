@@ -10,7 +10,8 @@ Tyler Heise, Ryan Perez, Austin Pennyfeather
  
  Tools
 ==============================
- [Reaper tool, RepoReapers Contributors, reaper (2015)](https://reporeapers.github.io)
+ [Cobertural(https://cobertura.github.io/cobertura/)
+ [CLOC](http://cloc.sourceforge.net/)
  
 
 Repositories
